@@ -16,4 +16,8 @@ public class DaoFactory {
         MonthlyDAO monthlyDao = new MonthlyDaoJdbc(DB.getConnection());
         return monthlyDao.getMonthlyByPlate(plate);
     }
+
+    public static MonthlyDAO createMonthyDao(){
+        return new MonthlyDaoJdbc(DB.getConnection());
+    }
 }
