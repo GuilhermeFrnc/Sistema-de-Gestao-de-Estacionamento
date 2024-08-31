@@ -33,4 +33,10 @@ public class DaoFactory {
         return slotDAO.findAvailableCarSpot(category);
     }
 
+
+    public static Integer [] checkSlotTruck(VehicleCategory category){
+        SlotDAO slotDAO =new SlotDaoJdbc(DB.getConnection());
+        return slotDAO.findAvailableTruckSpot(category);
+    }
+
 }
