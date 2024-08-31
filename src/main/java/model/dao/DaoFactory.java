@@ -27,4 +27,10 @@ public class DaoFactory {
         SlotDAO slotDAO =new SlotDaoJdbc(DB.getConnection());
         return slotDAO.findAvailableMotoSpot(category);
     }
+
+    public static Integer [] checkSlotCar(VehicleCategory category){
+        SlotDAO slotDAO =new SlotDaoJdbc(DB.getConnection());
+        return slotDAO.findAvailableCarSpot(category);
+    }
+
 }

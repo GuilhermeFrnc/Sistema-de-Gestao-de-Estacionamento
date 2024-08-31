@@ -1,10 +1,6 @@
 package application;
 
-import model.dao.DaoFactory;
-import model.entities.VehicleCategory;
 import service.MonthlyService;
-
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Program {
