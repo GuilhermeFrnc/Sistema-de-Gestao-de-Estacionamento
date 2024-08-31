@@ -3,8 +3,8 @@ package service;
 import model.dao.DaoFactory;
 import model.dao.MonthlyDAO;
 import model.entities.Monthly;
-import model.entities.VehicleCategory;
-import model.entities.VehicleType;
+import model.enums.VehicleCategory;
+import model.enums.VehicleType;
 
 public class MonthlyService {
     public void registerMonthly(String plate, int model) {

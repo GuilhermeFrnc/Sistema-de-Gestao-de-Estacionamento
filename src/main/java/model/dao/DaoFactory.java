@@ -4,7 +4,7 @@ import db.DB;
 import model.dao.impl.MonthlyDaoJdbc;
 import model.dao.impl.SlotDaoJdbc;
 import model.dao.impl.VehicleDaoJdbc;
-import model.entities.VehicleCategory;
+import model.enums.VehicleCategory;
 
 
 public class DaoFactory {

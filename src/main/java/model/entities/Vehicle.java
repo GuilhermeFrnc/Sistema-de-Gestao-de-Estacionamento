@@ -1,5 +1,8 @@
 package model.entities;
 
+import model.enums.VehicleCategory;
+import model.enums.VehicleType;
+
 public class Vehicle {
     private String plate;
     private VehicleType type;

@@ -2,7 +2,7 @@ package model.dao.impl;
 
 import db.DbException;
 import model.dao.SlotDAO;
-import model.entities.VehicleCategory;
+import model.enums.VehicleCategory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
