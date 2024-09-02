@@ -8,4 +8,6 @@ public interface SlotDAO {
     Integer[] findAvailableTruckSpot(VehicleCategory category);
     void occupySlots(Integer [] slotIds);
     void associateSlotsWithParking(Long parkingId, Integer[] slotIds);
+    Integer[] checkAndDisassociateSlotsFromParking(Long parkingId);
+    void unoccupySlots(Integer[] slotIds);
 }
