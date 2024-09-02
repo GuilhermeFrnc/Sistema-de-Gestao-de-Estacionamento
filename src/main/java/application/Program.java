@@ -3,10 +3,12 @@ package application;
 import service.MonthlyService;
 import java.util.Scanner;
 
+
 public class Program {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int cont =1;
+        String plate;
 
         while (cont!= 0){
             System.out.println("BEM VINDO AO ESTACIONAMENTO!");
@@ -19,13 +21,12 @@ public class Program {
             switch (cont){
                 case 1:
                     System.out.println("Qual a placa do Veículo: ");
-                    String plate = sc.next();
-
+                    plate = sc.next();
+                    
                     System.out.println("Qual tipo do Veículo:");
                     System.out.println("(1) Carro.");
                     System.out.println("(2) Moto.");
                     int model = sc.nextInt();
-
                     MonthlyService monthlyService = new MonthlyService();
 
                     try {
@@ -35,7 +36,6 @@ public class Program {
                         System.out.println("Erro ao cadastrar mensalista: " + e.getMessage());
                     }
                     break;
-
                 case 0:
                     break;
             }

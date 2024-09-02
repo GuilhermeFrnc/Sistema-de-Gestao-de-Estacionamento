@@ -5,4 +5,5 @@ import model.entities.Monthly;
 public interface MonthlyDAO {
     Long getMonthlyByPlate(String plate);
     Monthly insert(Monthly monthly);
+    Long getIdVehicleMonthy(String plate);
 }
