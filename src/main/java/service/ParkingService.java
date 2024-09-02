@@ -231,5 +231,9 @@ public class ParkingService {
         System.out.println("Data de entrada: " + parking.getFormattedDate());
         System.out.println("Horario da entrada: " + parking.getFormattedTime());
         System.out.println("Cancela em que entrou: " + parking.getIdGate());
+
+        for (int i = 0; i < slot.length; i++) {
+            System.out.println("Vaga " + (i + 1) + ": " + slot[i]);
+        }
     }
 }
