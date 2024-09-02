@@ -46,7 +46,7 @@ public class MonthlyDaoJdbc implements MonthlyDAO {
     @Override
     public Monthly insert(Monthly monthly) {
         String insertVehicleSql = "INSERT INTO Veiculo (placa, tipo, categoria) VALUES (?, ?, ?)";
-        String insertMonthlySql = "INSERT INTO Mensalidade (id_veiculo, valor, data_pagamento) VALUES (?, 80.00, NOW())";
+        String insertMonthlySql = "INSERT INTO Mensalidade (id_veiculo, valor, data_pagamento) VALUES (?, 250.00, NOW())";
 
         try {
             conn.setAutoCommit(false);
@@ -89,6 +89,32 @@ public class MonthlyDaoJdbc implements MonthlyDAO {
         }
 
         return monthly;
+    }
+
+    @Override
+    public Long getIdVehicleMonthy(String plate) {
+        VehicleDAO vehicleDao = DaoFactory.checkVehicle();
+        Long idVehicle = vehicleDao.getVehicleByPlate(plate);
+
+        if (idVehicle == null){
+            return null;
+        }
+
+        String sql = "SELECT id_mensalidade FROM Mensalidade WHERE id_veiculo = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, idVehicle);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return idVehicle;
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro ao verificar status do mensalista", e);
+        }
     }
 
 }

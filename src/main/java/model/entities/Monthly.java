@@ -1,5 +1,8 @@
 package model.entities;
 
+import model.enums.VehicleCategory;
+import model.enums.VehicleType;
+
 import java.util.Date;
 
 public class Monthly extends Vehicle{

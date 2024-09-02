@@ -1,8 +1,9 @@
-package model.entities;
+package model.enums;
 
 public enum VehicleType {
     MOTO,
     CARRO,
     CAMINHAO,
-    VAN;
+    VAN,
+    VEICULO_PUBLICO;
 }

@@ -1,4 +1,4 @@
-package model.entities;
+package model.enums;
 
 public enum VehicleCategory {
     MENSALISTA,

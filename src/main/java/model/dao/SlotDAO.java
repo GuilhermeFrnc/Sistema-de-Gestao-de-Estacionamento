@@ -1,11 +1,11 @@
 package model.dao;
 
-import model.entities.VehicleCategory;
-
-import java.util.Optional;
+import model.enums.VehicleCategory;
 
 public interface SlotDAO {
-    Integer findAvailableMotoSpot(VehicleCategory category);
+    Integer [] findAvailableMotoSpot(VehicleCategory category);
     Integer[] findAvailableCarSpot(VehicleCategory category);
     Integer[] findAvailableTruckSpot(VehicleCategory category);
+    void occupySlots(Integer [] slotIds);
+    void associateSlotsWithParking(Long parkingId, Integer[] slotIds);
 }
