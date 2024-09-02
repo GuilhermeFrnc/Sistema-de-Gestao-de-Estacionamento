@@ -110,7 +110,7 @@ public class ParkingDaoJdbc implements ParkingDAO {
         String updateParkingSql = "UPDATE Estacionamento SET data_saida = NOW(), id_cancela_saida = ? WHERE id_veiculo = ? AND data_saida IS NULL";
 
         try (PreparedStatement updateParkingStmt = conn.prepareStatement(updateParkingSql)) {
-            updateParkingStmt.setString(1, String.valueOf(exitGate)); // Converte o int para String
+            updateParkingStmt.setString(1, String.valueOf(exitGate));
             updateParkingStmt.setLong(2, vehicleId);
 
             int affectedRows = updateParkingStmt.executeUpdate();
@@ -135,7 +135,7 @@ public class ParkingDaoJdbc implements ParkingDAO {
                 if (rs.next()) {
                     Long idVehicle = rs.getLong("id_veiculo");
                     Timestamp exitDate = rs.getTimestamp("data_saida");
-                    int exitGate = rs.getInt("id_cancela_saida"); // Tratando como int
+                    int exitGate = rs.getInt("id_cancela_saida");
 
                     parking = new Parking(idVehicle, exitGate, exitDate);
                 }
@@ -146,6 +146,25 @@ public class ParkingDaoJdbc implements ParkingDAO {
         }
 
         return parking;
+    }
+
+    @Override
+    public void updateParkingValue(Long parkingId, Double valuePaid) {
+        String updateParkingSql = "UPDATE Estacionamento SET valor_pago = ? WHERE id_estacionamento = ?";
+
+        try (PreparedStatement updateParkingStmt = conn.prepareStatement(updateParkingSql)) {
+            updateParkingStmt.setDouble(1, valuePaid);
+            updateParkingStmt.setLong(2, parkingId);
+
+            int affectedRows = updateParkingStmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Failed to update parking value. No matching entry found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating parking value", e);
+        }
     }
 
 }

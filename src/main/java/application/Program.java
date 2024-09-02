@@ -23,7 +23,6 @@ public class Program {
             System.out.println("(1) Cadastrar Mensalista.");
             System.out.println("(2) Entrar no estacionamento.");
             System.out.println("(3) Sair do estacionamento.");
-            System.out.println("(4) Cadastrar Caminhão de entrega.");
             System.out.println("(0) Fechar o Sitema.");
             cont= sc.nextInt();
 
@@ -91,6 +90,17 @@ public class Program {
                     }
 
                     parkingService.entryVehicle(plate, gate, type, VehicleCategory.AVULSO);
+                    break;
+
+                case 3:
+                    System.out.println("Qual a placa do veículo:");
+                    plate = sc.next();
+                    System.out.println("Em qual cancela está:");
+                    System.out.println("(1)(2)(3)(4)(5)(6)(7)(8)(9)(10)");
+                    gate = sc.nextInt();
+
+                    ParkingService exitService = new ParkingService();
+                    exitService.exitVehicle(plate, gate);
                     break;
                 case 0:
                     break;

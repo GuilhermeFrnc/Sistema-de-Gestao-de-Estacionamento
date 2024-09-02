@@ -102,4 +102,20 @@ public class DaoFactory {
         return parkingDAO.getParkingExitById(parkingId);
     }
 
+    public static Integer[] checkAndDisassociateSlotsFromParking(Long parkingId){
+        SlotDAO slotDAO = new SlotDaoJdbc(DB.getConnection());
+        return slotDAO.checkAndDisassociateSlotsFromParking(parkingId);
+    }
+
+    public static void unoccupySlots(Integer[] slotIds){
+        SlotDAO slotDAO = new SlotDaoJdbc(DB.getConnection());
+        slotDAO.unoccupySlots(slotIds);
+    }
+
+    public static void updateParkingValue(Long parkingId, Double valuePaid){
+        ParkingDAO parkingDAO = new ParkingDaoJdbc(DB.getConnection());
+        parkingDAO.updateParkingValue(parkingId, valuePaid);
+    }
+
+
 }

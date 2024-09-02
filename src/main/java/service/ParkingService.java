@@ -8,9 +8,13 @@ import model.entities.Vehicle;
 import model.enums.VehicleCategory;
 import model.enums.VehicleType;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 
 public class ParkingService {
     public Boolean entryVehicleMonthly(String plate, Integer gate) {
+
         Long idVehicleMonthly = DaoFactory.getIdVehicleMonthly(plate);
         if (idVehicleMonthly != null) {
             Vehicle vehicle = DaoFactory.getVehicleDb(idVehicleMonthly);
@@ -117,6 +121,49 @@ public class ParkingService {
         System.out.println("Entrada do veículo com placa " + plate + " foi bem-sucedida.");
     }
 
+
+    public void exitVehicle(String plate, int gate){
+        Long vehicleId = DaoFactory.getVehicleIdByPlate(plate);
+        Vehicle vehicle = DaoFactory.getVehicleDb(vehicleId);
+
+        validateGateExit(gate,vehicle.getType());//fazer validacao
+
+
+        Long idParking = DaoFactory.getIdParking(vehicleId);
+        DaoFactory.updateParkingExit(vehicleId, gate);
+        Integer[] slots = DaoFactory.checkAndDisassociateSlotsFromParking(idParking);
+        DaoFactory.unoccupySlots(slots);
+
+        if(vehicle.getCategory()==VehicleCategory.MENSALISTA || vehicle.getCategory() == VehicleCategory.PUBLICO || vehicle.getCategory() == VehicleCategory.CAMINHAO_ENTREGA){
+            System.out.println("Veiculo Saiu.");
+            return;
+        }
+
+        Parking parkingEntry = DaoFactory.getParkingEntryById(idParking);
+        Parking parkingExit = DaoFactory.getParkingExitById(idParking);
+
+        Double val = calculateValue(parkingEntry.getDate(), parkingExit.getDate());
+        DaoFactory.updateParkingValue(idParking, val);
+
+        ticketExit(parkingEntry, parkingExit, val);
+
+        System.out.println("Veiculo Saiu.");
+    }
+
+    public Double calculateValue(Date dateEntry, Date dateExit){
+        final double RATE_PER_MINUTE = 0.10;
+        final double MINIMUM_FEE = 5.00;
+
+        long differenceInMillis = dateExit.getTime() - dateEntry.getTime();
+        long differenceInMinutes = TimeUnit.MILLISECONDS.toMinutes(differenceInMillis);
+
+        double totalFee = differenceInMinutes * RATE_PER_MINUTE;
+
+        return Math.max(totalFee, MINIMUM_FEE);
+    }
+
+
+
     public boolean validateGateEntry(int gate, VehicleType type) {
 
         try {
@@ -145,7 +192,37 @@ public class ParkingService {
     }
 
     public boolean validateGateExit(int gate, VehicleType type) {
-        return false;
+        try {
+            switch (type) {
+                case CARRO, VEICULO_PUBLICO, CAMINHAO, VAN -> {
+                    if (gate < 6 || gate > 10) {
+                        throw new IllegalArgumentException("Esse veículo só pode sair pelas cancelas de 6 a 10.");
+                    }
+                }
+                case MOTO -> {
+                    if (gate != 10) {
+                        throw new IllegalArgumentException("Esse veículo só pode sair pela cancela 10.");
+                    }
+                }
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
+    public void ticketExit(Parking parking, Parking parkingExit, Double value){
+        System.out.println("TICKET:");
+        System.out.println();
+        System.out.println("Data de entrada: " + parking.getFormattedDate());
+        System.out.println("Horario da entrada: " + parking.getFormattedTime());
+        System.out.println("Cancela em que entrou: " + parking.getIdGate());
+        System.out.println();
+        System.out.println("Data da saida: "+ parkingExit.getFormattedDate());
+        System.out.println("Horario da saida: "+ parkingExit.getFormattedTime());
+        System.out.println("Cancela que saiu: " + parkingExit.getIdGate());
+        System.out.println("Valor que pagou: "+ value);
     }
 
     public void ticketEntry(Parking parking, Integer[] slot) {

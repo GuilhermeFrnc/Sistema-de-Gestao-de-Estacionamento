@@ -154,4 +154,57 @@ public class SlotDaoJdbc implements SlotDAO {
         }
     }
 
+    @Override
+    public Integer[] checkAndDisassociateSlotsFromParking(Long parkingId) {
+        String selectSlotIdsSql = "SELECT id_vaga FROM Vaga_Ocupacao WHERE id_estacionamento = ?";
+        String deleteSlotOccupySql = "DELETE FROM Vaga_Ocupacao WHERE id_estacionamento = ?";
+
+        try (
+                PreparedStatement selectSlotIdsStmt = conn.prepareStatement(selectSlotIdsSql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                PreparedStatement deleteSlotOccupyStmt = conn.prepareStatement(deleteSlotOccupySql)
+        ) {
+            selectSlotIdsStmt.setLong(1, parkingId);
+            ResultSet rs = selectSlotIdsStmt.executeQuery();
+
+            rs.last();
+            int rowCount = rs.getRow();
+            rs.beforeFirst();
+
+            Integer[] slotIds = new Integer[rowCount];
+            int index = 0;
+
+            while (rs.next()) {
+                slotIds[index++] = rs.getInt("id_vaga");
+            }
+
+            deleteSlotOccupyStmt.setLong(1, parkingId);
+            deleteSlotOccupyStmt.executeUpdate();
+
+            return slotIds;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error checking and disassociating slots from parking", e);
+        }
+    }
+
+    @Override
+    public void unoccupySlots(Integer[] slotIds) {
+        String updateSlotSql = "UPDATE Vaga SET ocupada = FALSE WHERE id_vaga = ?";
+
+        try (PreparedStatement updateSlotStmt = conn.prepareStatement(updateSlotSql)) {
+            for (int slotId : slotIds) {
+                updateSlotStmt.setInt(1, slotId);
+                int affectedRows = updateSlotStmt.executeUpdate();
+
+                if (affectedRows == 0) {
+                    throw new SQLException("Failed to update slot with id: " + slotId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error updating slots to unoccupied", e);
+        }
+    }
+
 }

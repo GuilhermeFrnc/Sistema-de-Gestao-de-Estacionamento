@@ -9,5 +9,6 @@ public interface ParkingDAO {
     boolean hasActiveParking(Long vehicleId);
     void updateParkingExit(Long vehicleId, int exitGate);
     Parking getParkingExitById(Long parkingId);
+    void updateParkingValue(Long parkingId, Double valuePaid);
 
 }
