@@ -46,7 +46,7 @@ public class MonthlyDaoJdbc implements MonthlyDAO {
     @Override
     public Monthly insert(Monthly monthly) {
         String insertVehicleSql = "INSERT INTO Veiculo (placa, tipo, categoria) VALUES (?, ?, ?)";
-        String insertMonthlySql = "INSERT INTO Mensalidade (id_veiculo, valor, data_pagamento) VALUES (?, 80.00, NOW())";
+        String insertMonthlySql = "INSERT INTO Mensalidade (id_veiculo, valor, data_pagamento) VALUES (?, 250.00, NOW())";
 
         try {
             conn.setAutoCommit(false);
