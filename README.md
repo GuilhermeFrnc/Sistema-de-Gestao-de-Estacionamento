@@ -148,6 +148,7 @@ Siga os passos abaixo para configurar o projeto no seu ambiente:
   ```
 
 4. **Modifique o arquivo db.properties**
+
   para fazer a conexao com o banco de dados insira as credenciais do seu banco
   
   ```properties
